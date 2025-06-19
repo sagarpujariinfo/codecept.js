@@ -1,4 +1,4 @@
-name: CodeceptJS Tests
+name: CodeceptJS Parallel CI
 
 on:
   push:
@@ -9,16 +9,19 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
+        browser: [chromium, firefox]  # Environment matrix
         node-version: [18.x]
+
+    env:
+      BROWSER: ${{ matrix.browser }}
 
     steps:
       - name:  Checkout repository
         uses: actions/checkout@v3
 
-      - name:  Setup Node.js
+      - name: 🔹 Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
@@ -27,14 +30,47 @@ jobs:
         run: npm ci
 
       - name:  Install Playwright Browsers
-        run: npx playwright install
+        run: npx playwright install --with-deps
 
-      - name:  Run CodeceptJS Tests
-        run: npx codeceptjs run --steps
+      - name:  Create Playwright Config for Parallel
+        run: |
+          echo "module.exports.config = {
+            tests: './tests/*_test.js',
+            output: './output',
+            helpers: {
+              Playwright: {
+                url: 'https://opensource-demo.orangehrmlive.com',
+                show: false,
+                browser: process.env.BROWSER,
+              }
+            },
+            include: {
+              I: './steps_file.js'
+            },
+            name: 'parallel-suite',
+            multiple: {
+              parallel: {
+                chunks: 3,
+              }
+            },
+            plugins: {
+              allure: { enabled: true },
+            }
+          };" > codecept.conf.js
 
-      - name:  Upload Allure report (optional)
+      - name:  Run CodeceptJS Tests in Parallel
+        run: npx codeceptjs run-multiple parallel --steps
+
+      - name:  Upload HTML/Mochawesome Report (if any)
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: allure-report
+          name: mochawesome-report
+          path: output
+
+      - name:  Upload Allure Results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: allure-results
           path: output
