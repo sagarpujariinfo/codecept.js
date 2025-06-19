@@ -17,3 +17,6 @@ npx codeceptjs run --grep "Login"
 
 dry run 
 npx codeceptjs dry-run --grep "Admin"
+
+clean output dir
+Remove-Item -Recurse -Force .\output\

@@ -1,8 +1,3 @@
-const { setHeadlessWhen } = require('@codeceptjs/configure');
-
-// Turn on headless mode when running with HEADLESS=true
-setHeadlessWhen(process.env.HEADLESS);
-
 exports.config = {
   tests: './tests/*_test.js',
   output: './output',
@@ -10,9 +5,9 @@ exports.config = {
     Playwright: {
       url: 'https://opensource-demo.orangehrmlive.com',
       show: true,
-      waitForTimeout: 10000,   // Default timeout for actions
-      timeout: 20000,          // Max timeout for step
-      waitForAction: 500,      // Delay between steps
+      waitForTimeout: 10000,
+      timeout: 20000,
+      waitForAction: 500,
       browser: 'chromium'
     }
   },
@@ -23,18 +18,6 @@ exports.config = {
     adminPage: './pages/AdminPage.js',
     addUserPage: './pages/AddUserPage.js'
   },
-  bootstrap: null,
-  mocha: {
-    reporter: 'mochawesome',
-    reporterOptions: {
-      reportDir: 'output',
-      reportFilename: 'report',
-      quiet: true,
-      json: true,
-      html: false
-    }
-  },
-  name: 'codecept-playwright-demo',
   plugins: {
     allure: {
       enabled: true,
@@ -52,17 +35,14 @@ exports.config = {
       enabled: true
     }
   },
-
   multiple: {
-    parallel: {
-      // Runs the test files in parallel (1 per file)
-      //chunks: 3,
-       grep: {
-      'addUser': 'addUser_test',
-      'admin': 'admin_test',
-      'login': 'orangeLogin_test'
+    chromium: {
+      browsers: ['chromium'],
+      chunks: (files) => files.map(f => [f])
     },
-      browsers: ['chromium']
+    firefox: {
+      browsers: ['firefox'],
+      chunks: (files) => files.map(f => [f])
     }
   }
 };

@@ -1,4 +1,4 @@
-Feature('Amazon.in Shopping Flow');
+Feature('Amazon.in Shopping Flow @chromium @firefox');
 
 Scenario('Add Hot New Release sneaker to cart and verify subtotal', async ({
   I, AmazonHomePage, AmazonCategoryPage, AmazonProductPage, AmazonCartPage

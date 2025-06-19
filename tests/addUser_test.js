@@ -3,7 +3,7 @@ const dashboardPage = require('../pages/DashboardPage');
 const adminPage = require('../pages/AdminPage');
 const addUserPage = require('../pages/AddUserPage');
 
-Feature('Admin - Add User');
+Feature('Admin - Add User @chromium @firefox');
 
 Before(async ({ I }) => {
   I.amOnPage('/web/index.php/auth/login');

@@ -1,7 +1,7 @@
 const loginPage = require('../pages/OrangeLoginPage.js');
 const dashboardPage = require('../pages/DashboardPage.js');
 
-Feature('OrangeHRM Login Scenarios');
+Feature('OrangeHRM Login Scenarios @chromium @firefox');
 
 Scenario('Valid Login', async ({ I }) => {
   I.amOnPage('/web/index.php/auth/login');

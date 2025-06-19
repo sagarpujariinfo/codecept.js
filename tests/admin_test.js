@@ -2,7 +2,7 @@ const loginPage = require('../pages/OrangeLoginPage.js');
 const dashboardPage = require('../pages/DashboardPage.js');
 const adminPage = require('../pages/AdminPage.js');
 
-Feature('Admin Page - User Management');
+Feature('Admin Page - User Management @chromium @firefox');
 
 Before(async ({ I }) => {
   I.amOnPage('/web/index.php/auth/login');
